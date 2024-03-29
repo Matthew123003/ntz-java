@@ -1,5 +1,7 @@
 package rocks.zipcode;
 
+import java.util.Arrays;
+
 /**
  * ntz main command.
  */
@@ -10,11 +12,11 @@ public final class Notez {
     public Notez() {
         this.filemap  = new FileMap();
     }
-    /**
-     * Says hello to the world.
-     * 
-     * @param args The arguments of the program.
-     */
+    ///**
+     //* Says hello to the world.
+     //*
+     //* @param args The arguments of the program.
+     //*/
     public static void main(String argv[]) {
         boolean _debug = true;
         // for help in handling the command line flags and data!
@@ -32,7 +34,7 @@ public final class Notez {
 
         /*
          * You will spend a lot of time right here.
-         * 
+         *
          * instead of loadDemoEntries, you will implement a series
          * of method calls that manipulate the Notez engine.
          * See the first one:
@@ -50,6 +52,14 @@ public final class Notez {
             } // this should give you an idea about how to TEST the Notez engine
               // without having to spend lots of time messing with command line arguments.
         }
+
+        if(argv.length == 0){
+            ntzEngine.printResults();
+        }else{
+            if(argv[0].equals("-c")){
+                ntzEngine.createAppendCategory("New Category", argv);
+            }
+        }
         /*
          * what other method calls do you need here to implement the other commands??
          */
@@ -57,6 +67,18 @@ public final class Notez {
     }
 
     private void addToCategory(String string, String[] argv) {
+        if(argv.length == 0){
+            System.out.println("No items to add to category " + string);
+        }
+        //Check if category already exists in filemap
+        if(!filemap.containsKey(string)){
+            filemap.put(string, new NoteList(string));
+        }
+
+        NoteList noteList = filemap.get(string);
+
+        //add each item to the noteList
+        noteList.addAll(Arrays.asList(argv));
     }
 
     private void saveDatabase() {
@@ -80,5 +102,9 @@ public final class Notez {
     /*
      * Put all your additional methods that implement commands like forget here...
      */
-
+    public void createAppendCategory(String str, String[] argv){
+        if(argv.length == 0){
+            System.out.println("Nothing to create or append " + str);
+        }
+    }
 }
