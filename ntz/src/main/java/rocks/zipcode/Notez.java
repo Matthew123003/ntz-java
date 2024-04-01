@@ -65,7 +65,16 @@ public final class Notez {
             ntzEngine.printResults();
         }else{
             if(argv[0].equals("-f")){
-                ntzEngine.replaceNote();
+                String indexStr = argv[1];
+                ntzEngine.forgetNote(indexStr);
+            }
+        }
+
+        if(argv.length == 0){
+            ntzEngine.printResults();
+        }else{
+            if(argv[0].equals("-e")){
+                ntzEngine.replaceNote("Replaced Note", Arrays.toString(argv));
             }
         }
         /*
@@ -129,12 +138,35 @@ public final class Notez {
         saveDatabase();
     }
 
-    public void replaceNote(String index, String newNote){
-        if(index < 1 || index > filemap.size()){
+    public void replaceNote(String indKey, String newNote){
+        if(!filemap.containsKey(indKey)){
+            System.out.println("Invalid note index.");
+        }
+        //Get the notelist at the specified index
+        NoteList noteList = filemap.get(indKey);
+        if(noteList != null){
+            noteList.set(Integer.parseInt(indKey), newNote);
+            System.out.println("Replaced note");
+        }else{
+            System.out.println("No Note found at index");
+        }
+
+        saveDatabase();
+    }
+
+    public void forgetNote(String indexStr){
+        if(!filemap.containsKey(indexStr)){
             System.out.println("Invalid note index.");
         }
 
-        NoteList noteList = filemap.get(index);
+        NoteList noteList = filemap.get(indexStr);
+
+        if(noteList != null){
+            noteList.remove(indexStr);
+            System.out.println("Note forgotten");
+        }else{
+            System.out.println("No note found at index");
+        }
     }
 
 }
