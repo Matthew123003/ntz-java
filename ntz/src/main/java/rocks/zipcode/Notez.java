@@ -77,6 +77,8 @@ public final class Notez {
                 ntzEngine.replaceNote("Replaced Note", Arrays.toString(argv));
             }
         }
+
+        ntzEngine.saveDatabase();
         /*
          * what other method calls do you need here to implement the other commands??
          */
@@ -96,6 +98,7 @@ public final class Notez {
 
         //add each item to the noteList
         noteList.addAll(Arrays.asList(argv));
+        saveDatabase();
     }
 
     private void saveDatabase() {
@@ -167,6 +170,7 @@ public final class Notez {
         }else{
             System.out.println("No note found at index");
         }
+        saveDatabase();
     }
 
 }
