@@ -39,9 +39,9 @@ public final class Notez {
          * of method calls that manipulate the Notez engine.
          * See the first one:
          */
-        ntzEngine.loadDemoEntries();
+        //ntzEngine.loadDemoEntries();
 
-        ntzEngine.saveDatabase();
+        //ntzEngine.saveDatabase();
 
         if (argv.length == 0) { // there are no commandline arguments
             //just print the contents of the filemap.
@@ -57,7 +57,15 @@ public final class Notez {
             ntzEngine.printResults();
         }else{
             if(argv[0].equals("-c")){
-                ntzEngine.createAppendCategory("New Category", argv);
+                ntzEngine.createAppendCategory("General", argv);
+            }
+        }
+
+        if(argv.length == 0){
+            ntzEngine.printResults();
+        }else{
+            if(argv[0].equals("-f")){
+                ntzEngine.replaceNote();
             }
         }
         /*
@@ -106,5 +114,27 @@ public final class Notez {
         if(argv.length == 0){
             System.out.println("Nothing to create or append " + str);
         }
+
+        //Check if category already exists in filemap
+        if(!filemap.containsKey(str)){
+            filemap.put(str, new NoteList(str));
+        }
+
+        NoteList noteList = filemap.get(str);
+
+        //Add each item to the noteList
+        noteList.addAll(Arrays.asList(argv));
+
+        //Save DB after adding items
+        saveDatabase();
     }
+
+    public void replaceNote(String index, String newNote){
+        if(index < 1 || index > filemap.size()){
+            System.out.println("Invalid note index.");
+        }
+
+        NoteList noteList = filemap.get(index);
+    }
+
 }
